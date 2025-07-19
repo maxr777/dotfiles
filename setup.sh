@@ -30,7 +30,8 @@ backup_if_exists ~/.bashrc "bashrc"
 backup_if_exists ~/.config/nvim "nvim config"
 backup_if_exists ~/.config/i3 "i3 config" 
 backup_if_exists ~/.tmux.conf "tmux config"
+backup_if_exists ~/.config/alacritty "alacritty config"
 
 [ -d "$backup_dir" ] && echo "Existing configs backed up to: $backup_dir"
 
-stow bashrc nvim i3 tmux
+stow bashrc nvim i3 tmux alacritty
