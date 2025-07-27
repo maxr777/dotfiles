@@ -205,3 +205,11 @@ bindsym Shift+Ctrl+space exec --no-startup-id anki
 bindsym $mod+d exec rofi -show drun
 bindsym $mod+Ctrl+l exec i3lock -c 000000
 bindsym Print exec flameshot gui
+
+# 12 is the id of my mouse, run "xinput list" and look for your mouse under pointers to find the id of it
+# exec --no-startup-id xinput --set-prop 12 "libinput Accel Profile Enabled" 0, 0, 0
+# exec --no-startup-id xinput --set-prop 12 "libinput Accel Speed" -0.8
+
+# device name approach for if I ever change the usb port
+exec --no-startup-id xinput --set-prop "Razer Razer Viper Mini" "libinput Accel Profile Enabled" 0, 0, 0
+exec --no-startup-id xinput --set-prop "Razer Razer Viper Mini" "libinput Accel Speed" -0.8
