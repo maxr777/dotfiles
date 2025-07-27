@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat
+sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat xinput
 
 if [ ! -d ~/.fzf ]; then
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
