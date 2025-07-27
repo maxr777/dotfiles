@@ -213,3 +213,7 @@ bindsym Print exec flameshot gui
 # device name approach for if I ever change the usb port
 exec --no-startup-id xinput --set-prop "Razer Razer Viper Mini" "libinput Accel Profile Enabled" 0, 0, 0
 exec --no-startup-id xinput --set-prop "Razer Razer Viper Mini" "libinput Accel Speed" -0.8
+
+# Brightness controls
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
