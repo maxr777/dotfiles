@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat xinput
+sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat xinput brightnessctl dunst
 
 if [ ! -d ~/.fzf ]; then
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
@@ -34,4 +34,4 @@ backup_if_exists ~/.config/alacritty "alacritty config"
 
 [ -d "$backup_dir" ] && echo "Existing configs backed up to: $backup_dir"
 
-stow bashrc nvim i3 tmux alacritty i3status
+stow bashrc nvim i3 tmux alacritty i3status dunst
