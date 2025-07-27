@@ -1,6 +1,8 @@
 #!/bin/bash
 
-sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat xinput brightnessctl dunst
+sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat xinput brightnessctl dunst thunar
+
+xdg-settings set default-file-manager thunar.desktop
 
 if [ ! -d ~/.fzf ]; then
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
