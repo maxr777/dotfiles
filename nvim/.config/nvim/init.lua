@@ -4,7 +4,7 @@ vim.opt.scrolloff = 8 -- Keep cursor 8 lines from screen edge while scrolling
 vim.opt.signcolumn = "yes" -- Always show sign column for LSP diagnostics
 vim.opt.updatetime = 250 -- Faster updates for gitsigns and diagnostics
 vim.opt.timeoutlen = 300 -- Shorter timeout for which-key
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = "100"
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.opt.clipboard = "unnamedplus"
@@ -123,3 +123,185 @@ vim.diagnostic.config({
 })
 
 require("config.lazy")
+
+-- ========================================== color scheme ========================================== 
+
+-- Clear existing highlights
+vim.cmd('highlight clear')
+if vim.fn.exists('syntax_on') then
+  vim.cmd('syntax reset')
+end
+
+vim.o.background = 'dark'
+vim.g.colors_name = 'mono'
+
+-- Base colors
+local colors = {
+  bg = '#1a1a1a',        -- Dark background
+  fg = '#e0e0e0',        -- Brighter main text for better contrast
+  comment = '#999999',   -- Gray for comments (easier navigation)
+  string = '#8dbf88',    -- Grayish green for strings (still visibly green)
+  cursor = '#cccccc',    -- Lighter cursor that works better with search
+  visual = '#404040',    -- Dark gray for visual selection
+  line_nr = '#606060',   -- Brighter line numbers
+  search = '#4a4a00',    -- Dark yellow background for search matches  
+  inc_search = '#666600', -- Brighter yellow background for current search match
+  error = '#ff6b6b',     -- Subtle red for errors
+  warning = '#ffd93d',   -- Subtle yellow for warnings
+}
+
+-- Helper function to set highlights
+local function hl(group, opts)
+  vim.api.nvim_set_hl(0, group, opts)
+end
+
+-- Editor highlights
+hl('Normal', { bg = colors.bg, fg = colors.fg })
+hl('NormalFloat', { bg = colors.bg, fg = colors.fg })
+hl('Cursor', { bg = colors.cursor, fg = colors.bg })
+hl('lCursor', { bg = colors.cursor, fg = colors.bg })
+hl('CursorLine', { bg = '#252525' })
+hl('CursorColumn', { bg = '#252525' })
+hl('LineNr', { fg = colors.line_nr })
+hl('CursorLineNr', { fg = colors.fg, bold = true })
+hl('Visual', { bg = colors.visual })
+hl('Search', { bg = colors.search, fg = colors.fg })
+hl('IncSearch', { bg = colors.inc_search, fg = colors.fg })
+hl('CurSearch', { bg = colors.inc_search, fg = colors.bg, bold = true })
+
+-- Status line
+hl('StatusLine', { bg = '#303030', fg = colors.fg })
+hl('StatusLineNC', { bg = '#202020', fg = colors.line_nr })
+
+-- Splits
+hl('VertSplit', { fg = '#404040' })
+hl('WinSeparator', { fg = '#404040' })
+
+-- Tabs
+hl('TabLine', { bg = '#202020', fg = colors.line_nr })
+hl('TabLineFill', { bg = '#202020' })
+hl('TabLineSel', { bg = colors.bg, fg = colors.fg })
+
+-- Popup menu
+hl('Pmenu', { bg = '#303030', fg = colors.fg })
+hl('PmenuSel', { bg = colors.visual, fg = colors.fg })
+hl('PmenuSbar', { bg = '#404040' })
+hl('PmenuThumb', { bg = colors.line_nr })
+
+-- Messages and command line
+hl('MsgArea', { fg = colors.fg })
+hl('ErrorMsg', { fg = colors.error })
+hl('WarningMsg', { fg = colors.warning })
+
+-- SYNTAX HIGHLIGHTING - The minimal approach
+-- Everything is the default foreground color EXCEPT:
+
+-- 1. Comments (medium gray)
+hl('Comment', { fg = colors.comment, italic = true })
+
+-- 2. Strings (slightly brighter than normal text)
+hl('String', { fg = colors.string })
+hl('Character', { fg = colors.string })
+
+-- 3. For markdown, highlight headers for structure
+hl('markdownH1', { fg = colors.fg, bold = true })
+hl('markdownH2', { fg = colors.fg, bold = true })
+hl('markdownH3', { fg = colors.fg, bold = true })
+hl('markdownH4', { fg = colors.fg, bold = true })
+hl('markdownH5', { fg = colors.fg, bold = true })
+hl('markdownH6', { fg = colors.fg, bold = true })
+
+-- Everything else uses the default foreground color (monochromatic)
+local mono_groups = {
+  'Constant', 'Number', 'Boolean', 'Float',
+  'Identifier', 'Function',
+  'Statement', 'Conditional', 'Repeat', 'Label', 'Operator', 'Keyword', 'Exception',
+  'PreProc', 'Include', 'Define', 'Macro', 'PreCondit',
+  'Type', 'StorageClass', 'Structure', 'Typedef',
+  'Special', 'SpecialChar', 'Tag', 'Delimiter', 'SpecialComment', 'Debug',
+  'Underlined', 'Ignore', 'Todo'
+}
+
+for _, group in ipairs(mono_groups) do
+  hl(group, { fg = colors.fg })
+end
+
+-- Diagnostics (keep minimal but functional)
+hl('DiagnosticError', { fg = colors.error })
+hl('DiagnosticWarn', { fg = colors.warning })
+hl('DiagnosticInfo', { fg = colors.fg })
+hl('DiagnosticHint', { fg = colors.comment })
+
+-- Diff (minimal)
+hl('DiffAdd', { bg = '#003300' })
+hl('DiffChange', { bg = '#333300' })
+hl('DiffDelete', { bg = '#330000' })
+hl('DiffText', { bg = '#555500' })
+
+-- Git signs (if using gitsigns.nvim)
+hl('GitSignsAdd', { fg = '#606060' })
+hl('GitSignsChange', { fg = '#606060' })
+hl('GitSignsDelete', { fg = '#606060' })
+
+-- Quick-scope (force consistent background highlighting)
+vim.g.qs_hi_priority = 2
+
+-- Quick-scope colors with autocmd to persist
+vim.api.nvim_create_augroup('qs_colors', { clear = true })
+vim.api.nvim_create_autocmd('ColorScheme', {
+  group = 'qs_colors',
+  callback = function()
+    -- Underlines (current)
+    vim.api.nvim_set_hl(0, 'QuickScopePrimary', { fg = '#e0e0e0', underline = true })
+    vim.api.nvim_set_hl(0, 'QuickScopeSecondary', { fg = '#e0e0e0', underline = true })
+    
+    -- Background focus (alternative - uncomment to use)
+    -- vim.api.nvim_set_hl(0, 'QuickScopePrimary', { bg = '#404040', fg = '#e0e0e0' })
+    -- vim.api.nvim_set_hl(0, 'QuickScopeSecondary', { bg = '#303030', fg = '#e0e0e0' })
+  end,
+})
+
+-- Apply quick-scope colors immediately (using direct API calls)
+-- Underlines (current)
+vim.api.nvim_set_hl(0, 'QuickScopePrimary', { fg = '#e0e0e0', underline = true })
+vim.api.nvim_set_hl(0, 'QuickScopeSecondary', { fg = '#e0e0e0', underline = true })
+
+-- Background focus (alternative - uncomment to use)
+-- vim.api.nvim_set_hl(0, 'QuickScopePrimary', { bg = '#404040', fg = '#e0e0e0' })
+-- vim.api.nvim_set_hl(0, 'QuickScopeSecondary', { bg = '#303030', fg = '#e0e0e0' })
+
+-- Treesitter overrides (ensure monochromatic approach)
+hl('@comment', { link = 'Comment' })
+hl('@string', { link = 'String' })
+hl('@string.documentation', { link = 'Comment' })
+
+-- Everything else monochromatic
+local ts_mono_groups = {
+  '@variable', '@variable.builtin', '@variable.parameter', '@variable.member',
+  '@constant', '@constant.builtin', '@constant.macro',
+  '@module', '@module.builtin',
+  '@label',
+  '@string.regexp', '@string.escape', '@string.special',
+  '@character', '@character.special',
+  '@number', '@number.float',
+  '@boolean',
+  '@type', '@type.builtin', '@type.definition',
+  '@attribute', '@attribute.builtin',
+  '@property',
+  '@function', '@function.builtin', '@function.call', '@function.macro',
+  '@function.method', '@function.method.call',
+  '@constructor',
+  '@operator',
+  '@keyword', '@keyword.coroutine', '@keyword.function', '@keyword.operator',
+  '@keyword.import', '@keyword.type', '@keyword.modifier', '@keyword.repeat',
+  '@keyword.return', '@keyword.debug', '@keyword.exception', '@keyword.conditional',
+  '@keyword.conditional.ternary', '@keyword.directive', '@keyword.directive.define',
+  '@punctuation.delimiter', '@punctuation.bracket', '@punctuation.special',
+  '@tag', '@tag.builtin', '@tag.attribute', '@tag.delimiter',
+}
+
+for _, group in ipairs(ts_mono_groups) do
+  hl(group, { fg = colors.fg })
+end
+
+-- ========================================== /color scheme ==========================================

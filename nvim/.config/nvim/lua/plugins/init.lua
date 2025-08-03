@@ -37,13 +37,13 @@ return {
 			require("gitsigns").setup()
 		end,
 	},
-	{
-		"karb94/neoscroll.nvim",
-		opts = {},
-		config = function()
-			require("neoscroll").setup()
-		end,
-	},
+	-- {
+	-- 	"karb94/neoscroll.nvim",
+	-- 	opts = {},
+	-- 	config = function()
+	-- 		require("neoscroll").setup()
+	-- 	end,
+	-- },
 	{
 		"nvim-tree/nvim-tree.lua",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -89,16 +89,16 @@ return {
 			require("which-key").setup()
 		end,
 	},
-	{
-		"sainnhe/gruvbox-material",
-		config = function()
-			vim.cmd("colorscheme gruvbox-material")
-			vim.cmd("set background=dark")
-			vim.g.gruvbox_material_background = "soft"
-			vim.g.gruvbox_material_foreground = "soft"
-			vim.g.gruvbox_material_palette = "material"
-		end,
-	},
+	-- {
+	-- 	"sainnhe/gruvbox-material",
+	-- 	config = function()
+	-- 		vim.cmd("colorscheme gruvbox-material")
+	-- 		vim.cmd("set background=dark")
+	-- 		vim.g.gruvbox_material_background = "soft"
+	-- 		vim.g.gruvbox_material_foreground = "soft"
+	-- 		vim.g.gruvbox_material_palette = "material"
+	-- 	end,
+	-- },
 	{
 		"akinsho/toggleterm.nvim",
 		version = "*",
