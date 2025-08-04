@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat xinput brightnessctl dunst thunar
+sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat xinput brightnessctl dunst thunar nmtui
 
 xdg-settings set default-file-manager thunar.desktop
 
