@@ -8,6 +8,8 @@ if [ ! -d ~/.fzf ]; then
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 fi
 
+~/.fzf/install
+
 mkdir -p ~/.tmux/plugins
 [ ! -d ~/.tmux/plugins/tpm ] && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 [ ! -d ~/.tmux/plugins/tmux-resurrect ] && git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/plugins/tmux-resurrect  
