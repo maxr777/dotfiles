@@ -218,5 +218,5 @@ exec --no-startup-id dunst
 # Touchpad configuration for ETPS/2 Elantech Touchpad
 exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput Tapping Enabled" 1
 exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput Click Method Enabled" 0 1
-exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput Natural Scrolling Enabled" 0
+exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput Natural Scrolling Enabled" 1
 exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput Scroll Method Enabled" 0 0 1
