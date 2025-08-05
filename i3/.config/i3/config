@@ -220,3 +220,5 @@ exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput
 exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput Click Method Enabled" 0 1
 exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput Natural Scrolling Enabled" 1
 exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput Scroll Method Enabled" 0 0 1
+
+exec --no-startup-id redshift
