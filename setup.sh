@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat xinput brightnessctl dunst thunar nmtui redshift
+sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat xinput brightnessctl dunst thunar nmtui redshift zathura-pdf-mupdf
 
 xdg-settings set default-file-manager thunar.desktop
 
@@ -38,4 +38,4 @@ backup_if_exists ~/.config/alacritty "alacritty config"
 
 [ -d "$backup_dir" ] && echo "Existing configs backed up to: $backup_dir"
 
-stow bashrc nvim i3 tmux alacritty i3status dunst claude mpv redshift
+stow bashrc nvim i3 tmux alacritty i3status dunst claude mpv redshift zathura
