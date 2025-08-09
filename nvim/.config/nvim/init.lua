@@ -139,6 +139,7 @@ local colors = {
   fg = '#e0e0e0',        -- Brighter main text for better contrast
   comment = '#777777',   -- Gray for comments (easier navigation) (all 9s or 6s are good too)
   string = '#8dbf88',    -- Grayish green for strings (still visibly green)
+  todo = '#88bfd8',      -- Light blue for TODO comments (equivalent of string color)
   cursor = '#cccccc',    -- Lighter cursor that works better with search
   visual = '#404040',    -- Dark gray for visual selection
   line_nr = '#606060',   -- Brighter line numbers
@@ -209,6 +210,16 @@ hl('markdownH4', { fg = colors.fg, bold = true })
 hl('markdownH5', { fg = colors.fg, bold = true })
 hl('markdownH6', { fg = colors.fg, bold = true })
 
+-- 4. TODO comments (light blue)
+hl('Todo', { fg = colors.todo })
+
+-- Set up TODO highlighting in comments
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function()
+    vim.fn.matchadd("Todo", "\\c\\<\\(todo\\|fixme\\|hack\\|note\\)\\>")
+  end,
+})
+
 -- Everything else uses the default foreground color (monochromatic)
 local mono_groups = {
   'Constant', 'Number', 'Boolean', 'Float',
@@ -217,7 +228,7 @@ local mono_groups = {
   'PreProc', 'Include', 'Define', 'Macro', 'PreCondit',
   'Type', 'StorageClass', 'Structure', 'Typedef',
   'Special', 'SpecialChar', 'Tag', 'Delimiter', 'SpecialComment', 'Debug',
-  'Underlined', 'Ignore', 'Todo'
+  'Underlined', 'Ignore'
 }
 
 for _, group in ipairs(mono_groups) do
