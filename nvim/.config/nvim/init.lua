@@ -31,10 +31,8 @@ end
 vim.keymap.set("i", "<Tab>", smart_tab, { expr = true, desc = "Smart Tab completion" })
 vim.keymap.set("i", "<S-Tab>", "<C-p>", { desc = "Previous completion" })
 
--- Optional: Tab in normal mode (enters insert mode first)
-vim.keymap.set("n", "<Tab>", function()
-	return "a" .. smart_tab()
-end, { expr = true, desc = "Smart Tab in normal mode" })
+-- Keep Tab/Ctrl+I for jump list navigation in normal mode
+-- Smart tab completion only works in insert mode
 
 -- Optional: LSP completion on separate key
 vim.keymap.set("i", "<C-j>", "<C-x><C-o>", { desc = "LSP completion" })
