@@ -221,4 +221,30 @@ exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput
 exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput Natural Scrolling Enabled" 1
 exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput Scroll Method Enabled" 0 0 1
 
-exec --no-startup-id redshift
+exec_always --no-startup-id "pkill redshift; redshift"
+
+# Workspace assignments for dual monitor setup
+workspace $ws1 output DP-0
+workspace $ws2 output DP-0
+workspace $ws3 output DP-0
+workspace $ws4 output DP-0
+workspace $ws5 output DP-0
+workspace $ws6 output DP-0
+workspace $ws7 output DP-0
+workspace $ws8 output DP-0
+workspace $ws9 output DP-0
+workspace $ws10 output HDMI-0
+
+# Window assignments to workspaces
+assign [class="Alacritty"] $ws1
+assign [class="Firefox"] $ws2
+assign [class="Brave-browser"] $ws2
+assign [class="Chromium"] $ws2
+assign [class="obsidian"] $ws3
+assign [class="Anki"] $ws4
+
+# Auto-start programs (will be assigned to workspaces automatically)
+exec --no-startup-id alacritty -e sh -c 'tmux attach || tmux new'
+exec --no-startup-id xdg-open http://
+exec --no-startup-id flatpak run md.obsidian.Obsidian
+exec --no-startup-id anki
