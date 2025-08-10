@@ -38,4 +38,4 @@ backup_if_exists ~/.config/alacritty "alacritty config"
 
 [ -d "$backup_dir" ] && echo "Existing configs backed up to: $backup_dir"
 
-stow bashrc nvim i3 tmux alacritty i3status dunst claude mpv redshift zathura
+stow bashrc nvim i3 tmux alacritty i3status dunst claude mpv redshift zathura gdb

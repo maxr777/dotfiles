@@ -1,15 +1,15 @@
-vim.opt.relativenumber = true -- Relative line numbers
+vim.opt.relativenumber = true
 vim.opt.number = true
-vim.opt.scrolloff = 8 -- Keep cursor 8 lines from screen edge while scrolling
-vim.opt.signcolumn = "yes" -- Always show sign column for LSP diagnostics
-vim.opt.updatetime = 250 -- Faster updates for gitsigns and diagnostics
-vim.opt.timeoutlen = 300 -- Shorter timeout for which-key
+vim.opt.scrolloff = 8
+vim.opt.signcolumn = "yes"
+vim.opt.updatetime = 250
+vim.opt.timeoutlen = 300
 vim.opt.colorcolumn = "100"
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.opt.clipboard = "unnamedplus"
 
--- Context-aware Tab completion function (no LSP)
+-- Context-aware tab completion
 local function smart_tab()
 	if vim.fn.pumvisible() == 1 then
 		return "<C-n>"
@@ -23,58 +23,43 @@ local function smart_tab()
 	elseif before_cursor:match("[%w%._/-]*[/.]$") then
 		return "<C-x><C-f>"
 	else
-		return "<C-n>" -- Just keyword completion, no LSP
+		return "<C-n>"
 	end
 end
 
--- Set up the keymaps
 vim.keymap.set("i", "<Tab>", smart_tab, { expr = true, desc = "Smart Tab completion" })
 vim.keymap.set("i", "<S-Tab>", "<C-p>", { desc = "Previous completion" })
 
--- Keep Tab/Ctrl+I for jump list navigation in normal mode
--- Smart tab completion only works in insert mode
-
--- Optional: LSP completion on separate key
-vim.keymap.set("i", "<C-j>", "<C-x><C-o>", { desc = "LSP completion" })
-
--- Resize splits
 vim.keymap.set("n", "<C-Up>", ":resize +1<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-Down>", ":resize -1<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-Left>", ":vertical resize -1<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-Right>", ":vertical resize +1<CR>", { noremap = true, silent = true })
 
--- Split switching
 vim.keymap.set("n", "<C-h>", "<C-w>h", { noremap = true })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { noremap = true })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { noremap = true })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { noremap = true })
 
--- Indent settings
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
--- Indent selection
 vim.keymap.set("v", "<Tab>", ">gv", { noremap = true, silent = true })
 vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true, silent = true })
 
--- Map <Esc> in terminal mode to switch to normal mode
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
 
--- undotree
 vim.keymap.set("n", "<F5>", vim.cmd.UndotreeToggle)
 
--- Buffer navigation
 vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>bp", ":bprevious<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>bd", ":bdelete<CR>", { noremap = true, silent = true })
 
--- Search settings
-vim.opt.ignorecase = true -- Case-insensitive search
-vim.opt.smartcase = true -- Unless uppercase is present
-vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { noremap = true, silent = true }) -- Esc clears the search highlight without canceling the search
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { noremap = true, silent = true })
 
--- Format on save
+
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*",
 	callback = function(args)
@@ -82,18 +67,13 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 })
 
--- nvim-tree
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 
--- ToggleTerm
-vim.keymap.set("n", "<C-\\>", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true })
 vim.keymap.set("n", "<F7>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true })
-vim.keymap.set("n", "<F8>", "<cmd>ToggleTerm direction=vertical<cr>", { noremap = true, silent = true })
-vim.keymap.set("t", "<C-\\>", "<cmd>ToggleTerm<cr>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>f", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true })
 vim.keymap.set("t", "<F7>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true })
-vim.keymap.set("t", "<F8>", "<cmd>ToggleTerm direction=vertical<cr>", { noremap = true, silent = true })
+vim.keymap.set("t", "<leader>f", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true })
 
--- LSP
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show hover documentation" })
 vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { desc = "Rename symbol" })

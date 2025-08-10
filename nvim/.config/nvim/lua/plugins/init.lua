@@ -37,13 +37,6 @@ return {
 			require("gitsigns").setup()
 		end,
 	},
-	-- {
-	-- 	"karb94/neoscroll.nvim",
-	-- 	opts = {},
-	-- 	config = function()
-	-- 		require("neoscroll").setup()
-	-- 	end,
-	-- },
 	{
 		"nvim-tree/nvim-tree.lua",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -89,16 +82,6 @@ return {
 			require("which-key").setup()
 		end,
 	},
-	-- {
-	-- 	"sainnhe/gruvbox-material",
-	-- 	config = function()
-	-- 		vim.cmd("colorscheme gruvbox-material")
-	-- 		vim.cmd("set background=dark")
-	-- 		vim.g.gruvbox_material_background = "soft"
-	-- 		vim.g.gruvbox_material_foreground = "soft"
-	-- 		vim.g.gruvbox_material_palette = "material"
-	-- 	end,
-	-- },
 	{
 		"akinsho/toggleterm.nvim",
 		version = "*",
@@ -109,7 +92,20 @@ return {
 		main = "ibl",
 		---@module "ibl"
 		---@type ibl.config
-		opts = {},
+		opts = {
+			indent = {
+				char = "│",  -- Thinner line character
+				highlight = { "IBLIndent" },
+			},
+			scope = {
+				enabled = false,  -- Disable scope highlighting for cleaner look
+			},
+		},
+		config = function(_, opts)
+			-- Set custom highlight to match your monochrome theme
+			vim.api.nvim_set_hl(0, "IBLIndent", { fg = "#4a4a4a" })
+			require("ibl").setup(opts)
+		end,
 	},
 	{
 		"stevearc/conform.nvim",
