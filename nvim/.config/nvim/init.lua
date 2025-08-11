@@ -69,10 +69,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 
-vim.keymap.set("n", "<F7>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>f", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true })
-vim.keymap.set("t", "<F7>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true })
-vim.keymap.set("t", "<leader>f", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true })
+vim.keymap.set("n", "<F7>", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true })
+vim.keymap.set("n", "<F8>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true })
+vim.keymap.set("t", "<F7>", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true })
+vim.keymap.set("t", "<F8>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true })
 
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show hover documentation" })
