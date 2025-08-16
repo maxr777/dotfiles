@@ -207,6 +207,7 @@ bindsym $mod+Ctrl+l exec i3lock -c 000000
 bindsym Print exec flameshot gui
 
 exec --no-startup-id ~/.config/i3/setup-mouse.sh
+exec_always --no-startup-id ~/.config/i3/setup-wacom.sh
 
 # Brightness controls
 bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
