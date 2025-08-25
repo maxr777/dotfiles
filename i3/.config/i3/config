@@ -194,7 +194,7 @@ bar {
 }
 
 # monitor settings
-exec_always --no-startup-id xrandr --output HDMI-0 --mode 1920x1080 --rate 59.94 --output DP-0 --mode 1920x1080 --rate 239.96 --right-of HDMI-0 --primary
+exec_always --no-startup-id xrandr --output HDMI-1 --mode 1920x1080 --rate 60.00 --pos 0x0 --output DP-0 --mode 1920x1080 --rate 239.96 --pos 1920x0 --primary --output HDMI-0 --mode 1920x1080 --rate 59.94 --pos 3840x0
 
 # remap caps to esc
 exec_always --no-startup-id setxkbmap -option caps:escape
@@ -224,17 +224,11 @@ exec_always --no-startup-id xinput set-prop "ETPS/2 Elantech Touchpad" "libinput
 
 exec_always --no-startup-id "pkill redshift; redshift"
 
-# Workspace assignments for dual monitor setup
+# Workspace assignments for triple monitor setup
 workspace $ws1 output DP-0
 workspace $ws2 output DP-0
 workspace $ws3 output DP-0
 workspace $ws4 output DP-0
-workspace $ws5 output DP-0
-workspace $ws6 output DP-0
-workspace $ws7 output DP-0
-workspace $ws8 output DP-0
-workspace $ws9 output HDMI-0
-workspace $ws10 output HDMI-0
 
 # Window assignments to workspaces
 assign [class="Alacritty"] $ws1
