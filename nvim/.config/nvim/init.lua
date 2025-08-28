@@ -88,7 +88,26 @@ vim.keymap.set("t", "<F8>", "<cmd>ToggleTerm direction=horizontal<cr>", { norema
 
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show hover documentation" })
-vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { desc = "Rename symbol" })
+-- Custom LSP rename with auto-save
+local function lsp_rename_with_autosave()
+	vim.lsp.buf.rename()
+	
+	-- Small delay to let the rename complete, then save all modified buffers
+	vim.defer_fn(function()
+		local current_buf = vim.api.nvim_get_current_buf()
+		for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+			if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].modified then
+				vim.api.nvim_buf_call(buf, function()
+					vim.cmd('write')
+				end)
+			end
+		end
+		-- Return to original buffer
+		vim.api.nvim_set_current_buf(current_buf)
+	end, 100)
+end
+
+vim.keymap.set("n", "<leader>lr", lsp_rename_with_autosave, { desc = "Rename symbol" })
 vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "Code actions" })
 vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Find references" })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
