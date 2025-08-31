@@ -31,8 +31,8 @@ local function smart_tab()
 	local before_cursor = line:sub(1, col)
 	if col == 0 or char_before:match("%s") then
 		return "<Tab>"
-	elseif before_cursor:match("[%w%._/-]*[/.]$") then
-		-- File path completion for paths ending in / or .
+	elseif before_cursor:match("[%w%._/-]*/$") then
+		-- File path completion for paths ending in /
 		return "<C-x><C-f>"
 	else
 		-- Use LSP completion for everything else
