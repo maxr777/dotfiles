@@ -50,8 +50,7 @@ return {
 		config = function()
 			local lspconfig = require("lspconfig")
 			lspconfig.lua_ls.setup({})
-			-- clangd disabled by default for performance
-			-- Use <leader>tc to toggle when needed
+			lspconfig.clangd.setup({})
 			lspconfig.ts_ls.setup({})
 			lspconfig.html.setup({})
 		end,
@@ -89,26 +88,26 @@ return {
 		version = "*",
 		opts = {},
 	},
-	{
-		"lukas-reineke/indent-blankline.nvim",
-		main = "ibl",
-		---@module "ibl"
-		---@type ibl.config
-		opts = {
-			indent = {
-				char = "│",  -- Thinner line character
-				highlight = { "IBLIndent" },
-			},
-			scope = {
-				enabled = false,  -- Disable scope highlighting for cleaner look
-			},
-		},
-		config = function(_, opts)
-			-- Set custom highlight to match your monochrome theme
-			vim.api.nvim_set_hl(0, "IBLIndent", { fg = "#4a4a4a" })
-			require("ibl").setup(opts)
-		end,
-	},
+	-- {
+	-- 	"lukas-reineke/indent-blankline.nvim",
+	-- 	main = "ibl",
+	-- 	---@module "ibl"
+	-- 	---@type ibl.config
+	-- 	opts = {
+	-- 		indent = {
+	-- 			char = "│",  -- Thinner line character
+	-- 			highlight = { "IBLIndent" },
+	-- 		},
+	-- 		scope = {
+	-- 			enabled = false,  -- Disable scope highlighting for cleaner look
+	-- 		},
+	-- 	},
+	-- 	config = function(_, opts)
+	-- 		-- Set custom highlight to match your monochrome theme
+	-- 		vim.api.nvim_set_hl(0, "IBLIndent", { fg = "#4a4a4a" })
+	-- 		require("ibl").setup(opts)
+	-- 	end,
+	-- },
 	{
 		"stevearc/conform.nvim",
 		opts = {},
