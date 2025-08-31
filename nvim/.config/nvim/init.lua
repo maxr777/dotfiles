@@ -21,7 +21,6 @@ vim.api.nvim_create_autocmd("FileChangedShellPost", {
   command = "echohl WarningMsg | echo 'File changed on disk. Buffer reloaded.' | echohl None",
 })
 
--- Context-aware tab completion
 local function smart_tab()
 	if vim.fn.pumvisible() == 1 then
 		return "<C-n>"
@@ -33,13 +32,15 @@ local function smart_tab()
 	if col == 0 or char_before:match("%s") then
 		return "<Tab>"
 	elseif before_cursor:match("[%w%._/-]*[/.]$") then
+		-- File path completion for paths ending in / or .
 		return "<C-x><C-f>"
 	else
-		return "<C-n>"
+		-- Use LSP completion for everything else
+		return "<C-x><C-o>"
 	end
 end
 
-vim.keymap.set("i", "<Tab>", smart_tab, { expr = true, desc = "Smart Tab completion" })
+vim.keymap.set("i", "<Tab>", smart_tab, { expr = true, desc = "Smart Tab - LSP completion" })
 vim.keymap.set("i", "<S-Tab>", "<C-p>", { desc = "Previous completion" })
 
 vim.keymap.set("n", "<C-Up>", ":resize +1<CR>", { noremap = true, silent = true })
