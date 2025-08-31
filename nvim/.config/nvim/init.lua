@@ -157,6 +157,7 @@ local colors = {
   comment = '#777777',   -- Gray for comments (easier navigation) (all 9s or 6s are good too)
   string = '#8dbf88',    -- Grayish green for strings (still visibly green)
   todo = '#88bfd8',      -- Light blue for TODO comments (equivalent of string color)
+  special = '#c8996b',   -- Muted orange for special characters like \n, \t, etc.
   cursor = '#cccccc',    -- Lighter cursor that works better with search
   visual = '#404040',    -- Dark gray for visual selection
   line_nr = '#606060',   -- Brighter line numbers
@@ -219,7 +220,11 @@ hl('Comment', { fg = colors.comment, italic = true })
 hl('String', { fg = colors.string })
 hl('Character', { fg = colors.string })
 
--- 3. For markdown, highlight headers for structure
+-- 3. Special characters (escape sequences like \n, \t, etc.)
+hl('SpecialChar', { fg = colors.special })
+hl('Special', { fg = colors.special })
+
+-- 4. For markdown, highlight headers for structure
 hl('markdownH1', { fg = colors.fg, bold = true })
 hl('markdownH2', { fg = colors.fg, bold = true })
 hl('markdownH3', { fg = colors.fg, bold = true })
@@ -227,7 +232,7 @@ hl('markdownH4', { fg = colors.fg, bold = true })
 hl('markdownH5', { fg = colors.fg, bold = true })
 hl('markdownH6', { fg = colors.fg, bold = true })
 
--- 4. TODO comments (light blue)
+-- 5. TODO comments (light blue)
 hl('Todo', { fg = colors.todo })
 
 -- Set up TODO highlighting in comments
@@ -244,7 +249,7 @@ local mono_groups = {
   'Statement', 'Conditional', 'Repeat', 'Label', 'Operator', 'Keyword', 'Exception',
   'PreProc', 'Include', 'Define', 'Macro', 'PreCondit',
   'Type', 'StorageClass', 'Structure', 'Typedef',
-  'Special', 'SpecialChar', 'Tag', 'Delimiter', 'SpecialComment', 'Debug',
+  'Tag', 'Delimiter', 'SpecialComment', 'Debug',
   'Underlined', 'Ignore'
 }
 
@@ -301,14 +306,18 @@ hl('@comment', { link = 'Comment' })
 hl('@string', { link = 'String' })
 hl('@string.documentation', { link = 'Comment' })
 
+-- Special characters for Treesitter
+hl('@string.escape', { fg = colors.special })
+hl('@string.special', { fg = colors.special })
+hl('@character.special', { fg = colors.special })
+
 -- Everything else monochromatic
 local ts_mono_groups = {
   '@variable', '@variable.builtin', '@variable.parameter', '@variable.member',
   '@constant', '@constant.builtin', '@constant.macro',
   '@module', '@module.builtin',
   '@label',
-  '@string.regexp', '@string.escape', '@string.special',
-  '@character', '@character.special',
+  '@string.regexp',
   '@number', '@number.float',
   '@boolean',
   '@type', '@type.builtin', '@type.definition',
