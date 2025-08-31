@@ -71,6 +71,10 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { noremap = true, silent = true })
 
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevelstart = 99
+
 
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*",
@@ -85,6 +89,29 @@ vim.keymap.set("n", "<F7>", "<cmd>ToggleTerm direction=float<cr>", { noremap = t
 vim.keymap.set("n", "<F8>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true })
 vim.keymap.set("t", "<F7>", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true })
 vim.keymap.set("t", "<F8>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true })
+
+-- Toggle clangd on/off for performance
+local function toggle_clangd()
+	local clients = vim.lsp.get_active_clients({ name = "clangd" })
+	if #clients > 0 then
+		for _, client in ipairs(clients) do
+			client.stop()
+		end
+		print("clangd disabled")
+	else
+		require("lspconfig").clangd.setup({
+			cmd = {
+				"clangd",
+				"--background-index=false",
+				"--clang-tidy=false",
+			},
+		})
+		vim.cmd("LspStart clangd")
+		print("clangd enabled")
+	end
+end
+
+vim.keymap.set("n", "<leader>tc", toggle_clangd, { desc = "Toggle clangd" })
 
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show hover documentation" })

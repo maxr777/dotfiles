@@ -16,6 +16,7 @@ return {
 				sync_install = false,
 				highlight = { enable = true },
 				indent = { enable = true },
+				fold = { enable = true },
 			})
 		end,
 	},
@@ -49,7 +50,8 @@ return {
 		config = function()
 			local lspconfig = require("lspconfig")
 			lspconfig.lua_ls.setup({})
-			lspconfig.clangd.setup({})
+			-- clangd disabled by default for performance
+			-- Use <leader>tc to toggle when needed
 			lspconfig.ts_ls.setup({})
 			lspconfig.html.setup({})
 		end,
