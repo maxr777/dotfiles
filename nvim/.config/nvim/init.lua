@@ -140,7 +140,7 @@ vim.diagnostic.config({
 
 require("config.lazy")
 
--- ========================================== color scheme ========================================== 
+-- ========================================== color scheme ==========================================
 
 -- Clear existing highlights
 vim.cmd('highlight clear')
@@ -162,7 +162,7 @@ local colors = {
   cursor = '#cccccc',    -- Lighter cursor that works better with search
   visual = '#404040',    -- Dark gray for visual selection
   line_nr = '#606060',   -- Brighter line numbers
-  search = '#4a4a00',    -- Dark yellow background for search matches  
+  search = '#4a4a00',    -- Dark yellow background for search matches
   inc_search = '#666600', -- Brighter yellow background for current search match
   error = '#ff6b6b',     -- Subtle red for errors
   warning = '#ffd93d',   -- Subtle yellow for warnings
@@ -286,7 +286,7 @@ vim.api.nvim_create_autocmd('ColorScheme', {
     -- Underlines (current)
     vim.api.nvim_set_hl(0, 'QuickScopePrimary', { fg = '#e0e0e0', underline = true })
     vim.api.nvim_set_hl(0, 'QuickScopeSecondary', { fg = '#e0e0e0', underline = true })
-    
+
     -- Background focus (alternative - uncomment to use)
     -- vim.api.nvim_set_hl(0, 'QuickScopePrimary', { bg = '#404040', fg = '#e0e0e0' })
     -- vim.api.nvim_set_hl(0, 'QuickScopeSecondary', { bg = '#303030', fg = '#e0e0e0' })

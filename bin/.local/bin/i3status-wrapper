@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+import sys
+import json
+import subprocess
+
+def get_timer_status():
+    """Get current timer/stopwatch status"""
+    try:
+        result = subprocess.run(
+            ['/home/max/.local/bin/timer-control', 'status'],
+            capture_output=True,
+            text=True,
+            timeout=1
+        )
+        status = result.stdout.strip()
+        if status:
+            return {
+                'full_text': status,
+                'name': 'timer',
+                'markup': 'none',
+                'color': '#FFFFFF'
+            }
+    except Exception:
+        pass
+    return None
+
+def print_line(message):
+    """Non-buffered printing to stdout"""
+    sys.stdout.write(message + '\n')
+    sys.stdout.flush()
+
+def read_line():
+    """Non-buffered reading from stdin"""
+    try:
+        line = sys.stdin.readline().strip()
+        if not line:
+            sys.exit(3)
+        return line
+    except KeyboardInterrupt:
+        sys.exit()
+
+if __name__ == '__main__':
+    # Skip the first line which contains the version header
+    print_line(read_line())
+
+    # The second line contains the start of the infinite array
+    print_line(read_line())
+
+    while True:
+        line = read_line()
+
+        # Remove leading comma if present
+        prefix = ''
+        if line.startswith(','):
+            line = line[1:]
+            prefix = ','
+
+        try:
+            j = json.loads(line)
+
+            # Insert timer status as first element if it exists
+            timer_status = get_timer_status()
+            if timer_status:
+                j.insert(0, timer_status)
+
+            print_line(prefix + json.dumps(j))
+        except Exception as e:
+            # If parsing fails, just pass through
+            print_line(prefix + line)

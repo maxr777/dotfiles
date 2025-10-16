@@ -41,7 +41,7 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {} 2> /dev
 alias ff='fzf --preview "bat --style=numbers --color=always {}"'
 
 # Override Alt+C with better directory finder
-bind '"\ec": " \C-e\C-u`fd --type d --hidden --follow --exclude .git | fzf`\e\C-e\er\C-m"'
+bind '"\ec": " \C-e\C-ucd \"\$(fd --type d --hidden --follow --exclude .git | fzf)\"\e\C-e\er\C-m"'
 
 # interactively select and kill a process
 alias fkill='kill $(ps aux | fzf | awk "{print \$2}")'

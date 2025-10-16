@@ -190,7 +190,7 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
+        status_command i3status | /home/max/.local/bin/i3status-wrapper
 }
 
 # monitor settings
@@ -205,6 +205,12 @@ bindsym Shift+Ctrl+space exec --no-startup-id anki
 bindsym $mod+d exec rofi -show drun
 bindsym $mod+Ctrl+l exec i3lock -c 000000
 bindsym Print exec flameshot gui
+
+# Timer and stopwatch controls
+bindsym $mod+t exec --no-startup-id /home/max/.local/bin/timer-control toggle-stopwatch
+bindsym $mod+Shift+t exec --no-startup-id /home/max/.local/bin/timer-control start-timer 25m
+bindsym $mod+Ctrl+t exec --no-startup-id /home/max/.local/bin/timer-control stop-timer
+bindsym $mod+Shift+Ctrl+t exec --no-startup-id /home/max/.local/bin/timer-control stop-timer && /home/max/.local/bin/timer-control stop-stopwatch
 
 exec --no-startup-id ~/.config/i3/setup-mouse.sh
 exec_always --no-startup-id ~/.config/i3/setup-wacom.sh

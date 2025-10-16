@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+# Control script for stopwatch and timer
+
+STATE_DIR="${XDG_RUNTIME_DIR:-/tmp}/timer-state"
+STOPWATCH_FILE="$STATE_DIR/stopwatch"
+TIMER_FILE="$STATE_DIR/timer"
+
+mkdir -p "$STATE_DIR"
+
+format_time() {
+    local total_seconds=$1
+    local hours=$((total_seconds / 3600))
+    local minutes=$(((total_seconds % 3600) / 60))
+    local seconds=$((total_seconds % 60))
+
+    if [ $hours -gt 0 ]; then
+        printf "%dh %02dm %02ds" $hours $minutes $seconds
+    elif [ $minutes -gt 0 ]; then
+        printf "%dm %02ds" $minutes $seconds
+    else
+        printf "%ds" $seconds
+    fi
+}
+
+get_stopwatch_status() {
+    if [ -f "$STOPWATCH_FILE" ]; then
+        local start_time=$(cat "$STOPWATCH_FILE")
+        local current_time=$(date +%s)
+        local elapsed=$((current_time - start_time))
+        echo "⏱ $(format_time $elapsed)"
+        return 0
+    fi
+    return 1
+}
+
+get_timer_status() {
+    if [ -f "$TIMER_FILE" ]; then
+        local data=$(cat "$TIMER_FILE")
+        local end_time=$(echo "$data" | cut -d: -f1)
+        local current_time=$(date +%s)
+        local remaining=$((end_time - current_time))
+
+        if [ $remaining -le 0 ]; then
+            echo "⏲ DONE"
+            # Optionally send notification
+            if command -v notify-send &> /dev/null; then
+                notify-send "Timer" "Time's up!" -u critical
+            fi
+            rm "$TIMER_FILE"
+            return 0
+        else
+            echo "⏲ $(format_time $remaining)"
+            return 0
+        fi
+    fi
+    return 1
+}
+
+case "$1" in
+    start-stopwatch)
+        date +%s > "$STOPWATCH_FILE"
+        echo "Stopwatch started"
+        ;;
+    stop-stopwatch|reset-stopwatch)
+        if [ -f "$STOPWATCH_FILE" ]; then
+            rm "$STOPWATCH_FILE"
+            echo "Stopwatch stopped"
+        fi
+        ;;
+    toggle-stopwatch)
+        if [ -f "$STOPWATCH_FILE" ]; then
+            rm "$STOPWATCH_FILE"
+            echo "Stopwatch stopped"
+        else
+            date +%s > "$STOPWATCH_FILE"
+            echo "Stopwatch started"
+        fi
+        ;;
+    start-timer)
+        if [ -z "$2" ]; then
+            echo "Usage: $0 start-timer <duration>"
+            echo "Examples: 25m, 1h, 90s, 1h30m"
+            exit 1
+        fi
+
+        # Parse duration (e.g., "25m", "1h", "90s", "1h30m")
+        duration_str="$2"
+        total_seconds=0
+
+        # Extract hours
+        if [[ $duration_str =~ ([0-9]+)h ]]; then
+            total_seconds=$((total_seconds + ${BASH_REMATCH[1]} * 3600))
+        fi
+        # Extract minutes
+        if [[ $duration_str =~ ([0-9]+)m ]]; then
+            total_seconds=$((total_seconds + ${BASH_REMATCH[1]} * 60))
+        fi
+        # Extract seconds
+        if [[ $duration_str =~ ([0-9]+)s ]]; then
+            total_seconds=$((total_seconds + ${BASH_REMATCH[1]}))
+        fi
+
+        if [ $total_seconds -eq 0 ]; then
+            echo "Invalid duration format"
+            exit 1
+        fi
+
+        end_time=$(($(date +%s) + total_seconds))
+        echo "$end_time:$duration_str" > "$TIMER_FILE"
+        echo "Timer set for $duration_str"
+        ;;
+    stop-timer|reset-timer)
+        if [ -f "$TIMER_FILE" ]; then
+            rm "$TIMER_FILE"
+            echo "Timer stopped"
+        fi
+        ;;
+    status)
+        output=""
+        if stopwatch=$(get_stopwatch_status); then
+            output="$stopwatch"
+        fi
+        if timer=$(get_timer_status); then
+            if [ -n "$output" ]; then
+                output="$output | $timer"
+            else
+                output="$timer"
+            fi
+        fi
+
+        if [ -n "$output" ]; then
+            echo "$output"
+        fi
+        ;;
+    *)
+        echo "Usage: $0 {start-stopwatch|stop-stopwatch|toggle-stopwatch|start-timer <duration>|stop-timer|status}"
+        echo ""
+        echo "Examples:"
+        echo "  $0 toggle-stopwatch"
+        echo "  $0 start-timer 25m"
+        echo "  $0 start-timer 1h30m"
+        echo "  $0 stop-timer"
+        exit 1
+        ;;
+esac
