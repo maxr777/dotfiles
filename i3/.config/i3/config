@@ -247,13 +247,13 @@ assign [class="Alacritty"] $ws1
 assign [class="Firefox"] $ws2
 assign [class="Brave-browser"] $ws2
 assign [class="Chromium"] $ws2
-assign [class="Anki"] $ws3
-assign [class="obsidian"] $ws4
+# assign [class="Anki"] $ws3
+assign [class="obsidian"] $ws3
 
 # Auto-start programs (will be assigned to workspaces automatically)
 exec --no-startup-id alacritty -e sh -c 'tmux attach || tmux new'
 exec --no-startup-id xdg-open http://
 exec --no-startup-id flatpak run md.obsidian.Obsidian
-exec --no-startup-id anki
+# exec --no-startup-id anki
 
 exec --no-startup-id unclutter --timeout 3

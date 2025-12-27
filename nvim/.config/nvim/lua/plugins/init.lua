@@ -31,13 +31,13 @@ return {
 			})
 		end,
 	},
-	{
-		"lewis6991/gitsigns.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		config = function()
-			require("gitsigns").setup()
-		end,
-	},
+	-- {
+	-- 	"lewis6991/gitsigns.nvim",
+	-- 	dependencies = { "nvim-tree/nvim-web-devicons" },
+	-- 	config = function()
+	-- 		require("gitsigns").setup()
+	-- 	end,
+	-- },
 	{
 		"nvim-tree/nvim-tree.lua",
 		dependencies = { "nvim-tree/nvim-web-devicons" },

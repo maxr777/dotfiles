@@ -127,16 +127,24 @@ vim.keymap.set("n", "<leader>ld", function()
 	vim.diagnostic.open_float(nil, { border = "rounded", max_width = 80 })
 end, { desc = "Show diagnostics in floating window" })
 
+-- vim.diagnostic.config({
+-- 	virtual_text = false,
+-- 	underline = true,
+-- 	signs = true,
+-- 	severity_sort = true,
+-- 	float = {
+-- 		source = "always",
+-- 		header = "",
+-- 		prefix = "",
+-- 	},
+-- })
+
 vim.diagnostic.config({
-	virtual_text = false,
-	underline = true,
-	signs = true,
-	severity_sort = true,
-	float = {
-		source = "always",
-		header = "",
-		prefix = "",
-	},
+  virtual_text = false,
+  signs = false,
+  underline = false,
+  update_in_insert = false,
+  severity_sort = false,
 })
 
 require("config.lazy")
@@ -158,7 +166,7 @@ local colors = {
   fg = '#e0e0e0',        -- Brighter main text for better contrast
   comment = '#777777',   -- Gray for comments (easier navigation) (all 9s or 6s are good too)
   string = '#8dbf88',    -- Grayish green for strings (still visibly green)
-  todo = '#88bfd8',      -- Light blue for TODO comments (equivalent of string color)
+  todo = '#FF7F7F',      -- Light red for TODO comments (equivalent of string color)
   special = '#c8996b',   -- Muted orange for special characters like \n, \t, etc.
   cursor = '#cccccc',    -- Lighter cursor that works better with search
   visual = '#404040',    -- Dark gray for visual selection
