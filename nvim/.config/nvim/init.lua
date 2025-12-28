@@ -167,6 +167,7 @@ local colors = {
   comment = '#777777',   -- Gray for comments (easier navigation) (all 9s or 6s are good too)
   string = '#8dbf88',    -- Grayish green for strings (still visibly green)
   todo = '#FF7F7F',      -- Light red for TODO comments (equivalent of string color)
+  note = '#88bfd8',      
   special = '#c8996b',   -- Muted orange for special characters like \n, \t, etc.
   cursor = '#cccccc',    -- Lighter cursor that works better with search
   visual = '#404040',    -- Dark gray for visual selection
@@ -242,13 +243,20 @@ hl('markdownH4', { fg = colors.fg, bold = true })
 hl('markdownH5', { fg = colors.fg, bold = true })
 hl('markdownH6', { fg = colors.fg, bold = true })
 
--- 5. TODO comments (light blue)
+-- 5. TODO comments
 hl('Todo', { fg = colors.todo })
+hl('Note', { fg = colors.note })
 
 -- Set up TODO highlighting in comments
 vim.api.nvim_create_autocmd("BufEnter", {
   callback = function()
     vim.fn.matchadd("Todo", "\\c\\<\\(todo\\|fixme\\|hack\\|note\\)\\>")
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function()
+    vim.fn.matchadd("Note", "\\c\\<\\(note\\)\\>")
   end,
 })
 
