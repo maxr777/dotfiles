@@ -88,26 +88,26 @@ return {
 		version = "*",
 		opts = {},
 	},
-	-- {
-	-- 	"lukas-reineke/indent-blankline.nvim",
-	-- 	main = "ibl",
-	-- 	---@module "ibl"
-	-- 	---@type ibl.config
-	-- 	opts = {
-	-- 		indent = {
-	-- 			char = "│",  -- Thinner line character
-	-- 			highlight = { "IBLIndent" },
-	-- 		},
-	-- 		scope = {
-	-- 			enabled = false,  -- Disable scope highlighting for cleaner look
-	-- 		},
-	-- 	},
-	-- 	config = function(_, opts)
-	-- 		-- Set custom highlight to match your monochrome theme
-	-- 		vim.api.nvim_set_hl(0, "IBLIndent", { fg = "#4a4a4a" })
-	-- 		require("ibl").setup(opts)
-	-- 	end,
-	-- },
+	{
+		"lukas-reineke/indent-blankline.nvim",
+		main = "ibl",
+		---@module "ibl"
+		---@type ibl.config
+		opts = {
+			indent = {
+				char = "│",  -- Thinner line character
+				highlight = { "IBLIndent" },
+			},
+			scope = {
+				enabled = false,  -- Disable scope highlighting for cleaner look
+			},
+		},
+		config = function(_, opts)
+			-- Set custom highlight to match your monochrome theme
+			vim.api.nvim_set_hl(0, "IBLIndent", { fg = "#4a4a4a" })
+			require("ibl").setup(opts)
+		end,
+	},
 	{
 		"stevearc/conform.nvim",
 		opts = {},
