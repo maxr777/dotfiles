@@ -56,7 +56,7 @@ vim.keymap.set("n", "<C-l>", "<C-w>l", { noremap = true })
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.softtabstop = 2
-vim.opt.expandtab = false
+vim.opt.expandtab = false 
 
 vim.keymap.set("v", "<Tab>", ">gv", { noremap = true, silent = true })
 vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true, silent = true })

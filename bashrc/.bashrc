@@ -57,3 +57,7 @@ alias gadd='git add $(git diff --name-only | fzf -m)'
 
 # styling
 export FZF_DEFAULT_OPTS='--height 40% --border --color=16'
+
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus

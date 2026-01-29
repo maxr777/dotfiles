@@ -67,10 +67,10 @@ bindsym $mod+Shift+q kill
 # bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -91,7 +91,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+h split h
+bindsym $mod+g split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -243,17 +243,19 @@ workspace $ws9 output HDMI-0
 workspace $ws10 output HDMI-0
 
 # Window assignments to workspaces
-# assign [class="Alacritty"] $ws1
-# assign [class="Firefox"] $ws2
-# assign [class="Brave-browser"] $ws2
-# assign [class="Chromium"] $ws2
-# assign [class="Anki"] $ws3
-# assign [class="obsidian"] $ws3
+assign [class="Alacritty"] $ws1
+assign [class="Firefox"] $ws2
+assign [class="Brave-browser"] $ws2
+assign [class="Chromium"] $ws2
+assign [class="obsidian"] $ws3
+assign [class="Anki"] $ws4
 
 # Auto-start programs (will be assigned to workspaces automatically)
-# exec --no-startup-id alacritty -e sh -c 'tmux attach || tmux new'
-# exec --no-startup-id xdg-open http://
-# exec --no-startup-id flatpak run md.obsidian.Obsidian
-# exec --no-startup-id anki
+exec --no-startup-id alacritty -e sh -c 'tmux attach || tmux new'
+exec --no-startup-id xdg-open http://
+exec --no-startup-id flatpak run md.obsidian.Obsidian
+exec --no-startup-id anki
 
 exec --no-startup-id unclutter --timeout 3
+
+exec --no-startup-id ibus-daemon -drx
