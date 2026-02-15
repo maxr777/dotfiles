@@ -61,3 +61,4 @@ export FZF_DEFAULT_OPTS='--height 40% --border --color=16'
 export GTK_IM_MODULE=ibus
 export QT_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
+. "$HOME/.cargo/env"
