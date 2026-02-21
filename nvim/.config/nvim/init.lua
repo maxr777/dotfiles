@@ -40,6 +40,21 @@ local function smart_tab()
 	end
 end
 
+-- Move selected lines up/down in visual mode
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
+
+-- Keep cursor centered when scrolling
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
+-- Keep cursor centered when cycling through search results
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
+
+-- Select all
+vim.keymap.set('n', '<leader>a', 'gg<S-v>G', { desc = 'Select all' })
+
 vim.keymap.set('n', '<leader>d', '"_dd', { desc = 'Delete line without yanking' })
 vim.keymap.set('v', '<leader>d', '"_d', { desc = 'Delete selection without yanking' })
 
