@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat xinput brightnessctl dunst thunar nmtui redshift zathura-pdf-mupdf unclutter libnotify python3 ibus ibus-libpinyin
+sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat xinput brightnessctl dunst thunar nmtui redshift zathura-pdf-mupdf unclutter libnotify python3 ibus ibus-libpinyin xset
 
 xdg-settings set default-file-manager thunar.desktop
 

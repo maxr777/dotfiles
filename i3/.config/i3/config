@@ -259,3 +259,5 @@ exec --no-startup-id anki
 exec --no-startup-id unclutter --timeout 3
 
 exec --no-startup-id ibus-daemon -drx
+
+exec --no-startup-id xset r rate 300 50
