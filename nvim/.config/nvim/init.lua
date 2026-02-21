@@ -40,6 +40,12 @@ local function smart_tab()
 	end
 end
 
+vim.keymap.set('n', '<leader>d', '"_dd', { desc = 'Delete line without yanking' })
+vim.keymap.set('v', '<leader>d', '"_d', { desc = 'Delete selection without yanking' })
+
+vim.keymap.set('n', '<leader>r', ':!./run.sh<CR>', { desc = 'Run run.sh' })
+vim.keymap.set('n', '<leader>m', ':!gcc main.c && ./a.out<CR>', { desc = 'Build and run' })
+
 vim.keymap.set('n', 'S', ':%s//g<Left><Left>', { noremap = true })
 
 vim.keymap.set('n', '<leader>c', ':!cppcheck --enable=all --suppress=missingIncludeSystem %<CR>', { desc = 'Run cppcheck' })
