@@ -40,6 +40,10 @@ local function smart_tab()
 	end
 end
 
+vim.keymap.set('n', 'S', ':%s//g<Left><Left>', { noremap = true })
+
+vim.keymap.set('n', '<leader>c', ':!cppcheck --enable=all --suppress=missingIncludeSystem %<CR>', { desc = 'Run cppcheck' })
+
 vim.keymap.set('n', '<leader>c', ':!cppcheck --enable=all --suppress=missingIncludeSystem %<CR>', { desc = 'Run cppcheck' })
 
 vim.keymap.set("i", "<Tab>", smart_tab, { expr = true, desc = "Smart Tab - LSP completion" })
