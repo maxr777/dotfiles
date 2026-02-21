@@ -35,8 +35,8 @@ local function smart_tab()
 		-- File path completion for paths ending in /
 		return "<C-x><C-f>"
 	else
-		-- Use LSP completion for everything else
-		return "<C-x><C-o>"
+		-- Use default completion
+		return "<C-n>"
 	end
 end
 
@@ -62,8 +62,6 @@ vim.keymap.set('n', '<leader>r', ':!./run.sh<CR>', { desc = 'Run run.sh' })
 vim.keymap.set('n', '<leader>m', ':!gcc main.c && ./a.out<CR>', { desc = 'Build and run' })
 
 vim.keymap.set('n', 'S', ':%s//g<Left><Left>', { noremap = true })
-
-vim.keymap.set('n', '<leader>c', ':!cppcheck --enable=all --suppress=missingIncludeSystem %<CR>', { desc = 'Run cppcheck' })
 
 vim.keymap.set('n', '<leader>c', ':!cppcheck --enable=all --suppress=missingIncludeSystem %<CR>', { desc = 'Run cppcheck' })
 
