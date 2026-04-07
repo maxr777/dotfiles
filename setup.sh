@@ -1,6 +1,11 @@
 #!/bin/bash
 
-sudo dnf install -y i3 neovim tmux stow alacritty rofi flameshot fd-find bat xinput brightnessctl dunst thunar nmtui redshift zathura-pdf-mupdf unclutter libnotify python3 ibus ibus-libpinyin xset
+sudo dnf install -y i3 tmux stow alacritty rofi flameshot fd-find bat xinput brightnessctl dunst thunar nmtui redshift zathura-pdf-mupdf unclutter libnotify python3 ibus ibus-libpinyin xset
+
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+sudo rm -rf /opt/nvim-linux-x86_64
+sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+rm -f nvim-linux-x86_64.tar.gz
 
 xdg-settings set default-file-manager thunar.desktop
 

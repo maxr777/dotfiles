@@ -62,3 +62,13 @@ export GTK_IM_MODULE=ibus
 export QT_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
 . "$HOME/.cargo/env"
+
+export PATH=/usr/local/cuda-12.6/bin:$PATH
+
+# opencode
+export PATH=/home/max/.opencode/bin:$PATH
+
+#esp-idf
+alias get_idf='. $HOME/esp/esp-idf/export.sh'
+
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
