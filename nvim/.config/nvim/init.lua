@@ -8,6 +8,11 @@ vim.opt.colorcolumn = "100"
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.opt.clipboard = "unnamedplus"
+vim.opt.completeopt = { "menu", "menuone", "popup" }
+vim.g.netrw_banner = 0
+vim.g.netrw_liststyle = 3
+vim.g.netrw_winsize = 25
+vim.g.netrw_keepdir = 0
 
 vim.opt.autoread = true
 
@@ -24,6 +29,12 @@ vim.api.nvim_create_autocmd("FileChangedShellPost", {
 local function smart_tab()
 	if vim.fn.pumvisible() == 1 then
 		return "<C-n>"
+	end
+	for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+		if client:supports_method("textDocument/completion") then
+			vim.lsp.completion.get()
+			return ""
+		end
 	end
 	local col = vim.fn.col(".") - 1
 	local line = vim.fn.getline(".")
@@ -88,7 +99,10 @@ vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true, silent = true })
 
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
 
-vim.keymap.set("n", "<F5>", vim.cmd.UndotreeToggle)
+vim.keymap.set("n", "<F5>", function()
+	vim.cmd.packadd("nvim.undotree")
+	vim.cmd.Undotree()
+end, { desc = "Toggle undo tree" })
 
 vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>bp", ":bprevious<CR>", { noremap = true, silent = true })
@@ -111,7 +125,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 })
 
-vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>e", ":Lexplore<CR>", { noremap = true, silent = true, desc = "Toggle file explorer" })
 
 vim.keymap.set("n", "<F7>", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true })
 vim.keymap.set("n", "<F8>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true })
@@ -120,8 +134,6 @@ vim.keymap.set("t", "<F8>", "<cmd>ToggleTerm direction=horizontal<cr>", { norema
 
 
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show hover documentation" })
-
 local function lsp_rename_with_autosave()
 	vim.lsp.buf.rename()
 	
@@ -140,246 +152,91 @@ local function lsp_rename_with_autosave()
 	end, 100)
 end
 
-vim.keymap.set("n", "<leader>lr", lsp_rename_with_autosave, { desc = "Rename symbol" })
-vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "Code actions" })
-vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Find references" })
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
+vim.keymap.set("n", "grn", lsp_rename_with_autosave, { desc = "Rename symbol" })
+vim.keymap.set("n", "]d", function()
+	vim.diagnostic.jump({ count = 1, float = true })
+end, { desc = "Next diagnostic" })
+vim.keymap.set("n", "[d", function()
+	vim.diagnostic.jump({ count = -1, float = true })
+end, { desc = "Previous diagnostic" })
 vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, { desc = "Signature help" })
-vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
 
 vim.keymap.set("n", "<leader>ld", function()
-	vim.diagnostic.open_float(nil, { border = "rounded", max_width = 80 })
+	vim.diagnostic.open_float(0, {
+		scope = "line",
+		border = "rounded",
+		max_width = 80,
+		focus = false,
+		source = "if_many",
+	})
 end, { desc = "Show diagnostics in floating window" })
-
--- vim.diagnostic.config({
--- 	virtual_text = false,
--- 	underline = true,
--- 	signs = true,
--- 	severity_sort = true,
--- 	float = {
--- 		source = "always",
--- 		header = "",
--- 		prefix = "",
--- 	},
--- })
 
 vim.diagnostic.config({
   virtual_text = false,
-  signs = false,
-  underline = false,
+  underline = true,
   update_in_insert = false,
-  severity_sort = false,
+  severity_sort = true,
+  float = {
+    border = "rounded",
+    source = "if_many",
+  },
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "E",
+      [vim.diagnostic.severity.WARN] = "W",
+      [vim.diagnostic.severity.INFO] = "I",
+      [vim.diagnostic.severity.HINT] = "H",
+    },
+  },
 })
 
-require("config.lazy")
+require("config.pack")
+require("config.lsp")
 
--- ========================================== color scheme ==========================================
+vim.o.background = "dark"
+vim.cmd.colorscheme("quiet")
 
--- Clear existing highlights
-vim.cmd('highlight clear')
-if vim.fn.exists('syntax_on') then
-  vim.cmd('syntax reset')
-end
-
-vim.o.background = 'dark'
-vim.g.colors_name = 'mono'
-
--- Base colors
-local colors = {
-  bg = '#1a1a1a',        -- Dark background
-  fg = '#e0e0e0',        -- Brighter main text for better contrast
-  comment = '#777777',   -- Gray for comments (easier navigation) (all 9s or 6s are good too)
-  string = '#8dbf88',    -- Grayish green for strings (still visibly green)
-  todo = '#FF7F7F',      -- Light red for TODO comments (equivalent of string color)
-  note = '#88bfd8',      
-  special = '#c8996b',   -- Muted orange for special characters like \n, \t, etc.
-  cursor = '#cccccc',    -- Lighter cursor that works better with search
-  visual = '#404040',    -- Dark gray for visual selection
-  line_nr = '#606060',   -- Brighter line numbers
-  search = '#4a4a00',    -- Dark yellow background for search matches
-  inc_search = '#666600', -- Brighter yellow background for current search match
-  error = '#ff6b6b',     -- Subtle red for errors
-  warning = '#ffd93d',   -- Subtle yellow for warnings
-}
-
--- Helper function to set highlights
-local function hl(group, opts)
-  vim.api.nvim_set_hl(0, group, opts)
-end
-
--- Editor highlights
-hl('Normal', { bg = colors.bg, fg = colors.fg })
-hl('NormalFloat', { bg = colors.bg, fg = colors.fg })
-hl('Cursor', { bg = colors.cursor, fg = colors.bg })
-hl('lCursor', { bg = colors.cursor, fg = colors.bg })
-hl('CursorLine', { bg = '#252525' })
-hl('CursorColumn', { bg = '#252525' })
-hl('LineNr', { fg = colors.line_nr })
-hl('CursorLineNr', { fg = colors.fg, bold = true })
-hl('Visual', { bg = colors.visual })
-hl('Search', { bg = colors.search, fg = colors.fg })
-hl('IncSearch', { bg = colors.inc_search, fg = colors.fg })
-hl('CurSearch', { bg = colors.inc_search, fg = colors.bg, bold = true })
-
--- Status line
-hl('StatusLine', { bg = '#303030', fg = colors.fg })
-hl('StatusLineNC', { bg = '#202020', fg = colors.line_nr })
-
--- Splits
-hl('VertSplit', { fg = '#404040' })
-hl('WinSeparator', { fg = '#404040' })
-
--- Tabs
-hl('TabLine', { bg = '#202020', fg = colors.line_nr })
-hl('TabLineFill', { bg = '#202020' })
-hl('TabLineSel', { bg = colors.bg, fg = colors.fg })
-
--- Popup menu
-hl('Pmenu', { bg = '#303030', fg = colors.fg })
-hl('PmenuSel', { bg = colors.visual, fg = colors.fg })
-hl('PmenuSbar', { bg = '#404040' })
-hl('PmenuThumb', { bg = colors.line_nr })
-
--- Messages and command line
-hl('MsgArea', { fg = colors.fg })
-hl('ErrorMsg', { fg = colors.error })
-hl('WarningMsg', { fg = colors.warning })
-
--- SYNTAX HIGHLIGHTING - The minimal approach
--- Everything is the default foreground color EXCEPT:
-
--- 1. Comments (medium gray)
-hl('Comment', { fg = colors.comment, italic = true })
-
--- 2. Strings (slightly brighter than normal text)
-hl('String', { fg = colors.string })
-hl('Character', { fg = colors.string })
-
--- 3. Special characters (escape sequences like \n, \t, etc.)
-hl('SpecialChar', { fg = colors.special })
-hl('Special', { fg = colors.special })
-
--- 4. For markdown, highlight headers for structure
-hl('markdownH1', { fg = colors.fg, bold = true })
-hl('markdownH2', { fg = colors.fg, bold = true })
-hl('markdownH3', { fg = colors.fg, bold = true })
-hl('markdownH4', { fg = colors.fg, bold = true })
-hl('markdownH5', { fg = colors.fg, bold = true })
-hl('markdownH6', { fg = colors.fg, bold = true })
-
--- 5. TODO comments
-hl('Todo', { fg = colors.todo })
-hl('Note', { fg = colors.note })
-
--- Set up TODO highlighting in comments
-vim.api.nvim_create_autocmd("BufEnter", {
-  callback = function()
-    vim.fn.matchadd("Todo", "\\c\\<\\(todo\\|fixme\\|hack\\|note\\)\\>")
-  end,
-})
-
-vim.api.nvim_create_autocmd("BufEnter", {
-  callback = function()
-    vim.fn.matchadd("Note", "\\c\\<\\(note\\)\\>")
-  end,
-})
-
--- Everything else uses the default foreground color (monochromatic)
-local mono_groups = {
-  'Constant', 'Number', 'Boolean', 'Float',
-  'Identifier', 'Function',
-  'Statement', 'Conditional', 'Repeat', 'Label', 'Operator', 'Keyword', 'Exception',
-  'PreProc', 'Include', 'Define', 'Macro', 'PreCondit',
-  'Type', 'StorageClass', 'Structure', 'Typedef',
-  'Tag', 'Delimiter', 'SpecialComment', 'Debug',
-  'Underlined', 'Ignore'
-}
-
-for _, group in ipairs(mono_groups) do
-  hl(group, { fg = colors.fg })
-end
-
--- Diagnostics (keep minimal but functional)
-hl('DiagnosticError', { fg = colors.error })
-hl('DiagnosticWarn', { fg = colors.warning })
-hl('DiagnosticInfo', { fg = colors.fg })
-hl('DiagnosticHint', { fg = colors.comment })
-
--- Diff (minimal)
-hl('DiffAdd', { bg = '#003300' })
-hl('DiffChange', { bg = '#333300' })
-hl('DiffDelete', { bg = '#330000' })
-hl('DiffText', { bg = '#555500' })
-
--- Git signs (if using gitsigns.nvim)
-hl('GitSignsAdd', { fg = '#606060' })
-hl('GitSignsChange', { fg = '#606060' })
-hl('GitSignsDelete', { fg = '#606060' })
-
--- Quick-scope (force consistent background highlighting)
 vim.g.qs_hi_priority = 2
 
--- Quick-scope colors with autocmd to persist
-vim.api.nvim_create_augroup('qs_colors', { clear = true })
-vim.api.nvim_create_autocmd('ColorScheme', {
-  group = 'qs_colors',
-  callback = function()
-    -- Underlines (current)
-    vim.api.nvim_set_hl(0, 'QuickScopePrimary', { fg = '#e0e0e0', underline = true })
-    vim.api.nvim_set_hl(0, 'QuickScopeSecondary', { fg = '#e0e0e0', underline = true })
-
-    -- Background focus (alternative - uncomment to use)
-    -- vim.api.nvim_set_hl(0, 'QuickScopePrimary', { bg = '#404040', fg = '#e0e0e0' })
-    -- vim.api.nvim_set_hl(0, 'QuickScopeSecondary', { bg = '#303030', fg = '#e0e0e0' })
-  end,
-})
-
--- Apply quick-scope colors immediately (using direct API calls)
--- Underlines (current)
-vim.api.nvim_set_hl(0, 'QuickScopePrimary', { fg = '#e0e0e0', underline = true })
-vim.api.nvim_set_hl(0, 'QuickScopeSecondary', { fg = '#e0e0e0', underline = true })
-
--- Background focus (alternative - uncomment to use)
--- vim.api.nvim_set_hl(0, 'QuickScopePrimary', { bg = '#404040', fg = '#e0e0e0' })
--- vim.api.nvim_set_hl(0, 'QuickScopeSecondary', { bg = '#303030', fg = '#e0e0e0' })
-
--- Treesitter overrides (ensure monochromatic approach)
-hl('@comment', { link = 'Comment' })
-hl('@string', { link = 'String' })
-hl('@string.documentation', { link = 'Comment' })
-
--- Special characters for Treesitter
-hl('@string.escape', { fg = colors.special })
-hl('@string.special', { fg = colors.special })
-hl('@character.special', { fg = colors.special })
-
--- Everything else monochromatic
-local ts_mono_groups = {
-  '@variable', '@variable.builtin', '@variable.parameter', '@variable.member',
-  '@constant', '@constant.builtin', '@constant.macro',
-  '@module', '@module.builtin',
-  '@label',
-  '@string.regexp',
-  '@number', '@number.float',
-  '@boolean',
-  '@type', '@type.builtin', '@type.definition',
-  '@attribute', '@attribute.builtin',
-  '@property',
-  '@function', '@function.builtin', '@function.call', '@function.macro',
-  '@function.method', '@function.method.call',
-  '@constructor',
-  '@operator',
-  '@keyword', '@keyword.coroutine', '@keyword.function', '@keyword.operator',
-  '@keyword.import', '@keyword.type', '@keyword.modifier', '@keyword.repeat',
-  '@keyword.return', '@keyword.debug', '@keyword.exception', '@keyword.conditional',
-  '@keyword.conditional.ternary', '@keyword.directive', '@keyword.directive.define',
-  '@punctuation.delimiter', '@punctuation.bracket', '@punctuation.special',
-  '@tag', '@tag.builtin', '@tag.attribute', '@tag.delimiter',
-}
-
-for _, group in ipairs(ts_mono_groups) do
-  hl(group, { fg = colors.fg })
+local function set_quick_scope_colors()
+	vim.api.nvim_set_hl(0, "QuickScopePrimary", { fg = "#e0e0e0", underline = true })
+	vim.api.nvim_set_hl(0, "QuickScopeSecondary", { fg = "#e0e0e0", underline = true })
 end
 
--- ========================================== /color scheme ==========================================
+local function set_which_key_colors()
+	vim.api.nvim_set_hl(0, "WhichKeyNormal", { fg = "#f2f2f2", bg = "#202020" })
+	vim.api.nvim_set_hl(0, "WhichKeyBorder", { fg = "#505050", bg = "#202020" })
+	vim.api.nvim_set_hl(0, "WhichKeyTitle", { fg = "#f2f2f2", bg = "#202020", bold = true })
+	vim.api.nvim_set_hl(0, "WhichKey", { fg = "#f2f2f2", bg = "#202020", bold = true })
+	vim.api.nvim_set_hl(0, "WhichKeyGroup", { fg = "#f2f2f2", bg = "#202020", bold = true })
+	vim.api.nvim_set_hl(0, "WhichKeyDesc", { fg = "#f2f2f2", bg = "#202020" })
+	vim.api.nvim_set_hl(0, "WhichKeySeparator", { fg = "#9a9a9a", bg = "#202020" })
+	vim.api.nvim_set_hl(0, "WhichKeyValue", { fg = "#c0c0c0", bg = "#202020" })
+	vim.api.nvim_set_hl(0, "WhichKeyFloat", { fg = "#f2f2f2", bg = "#202020" })
+end
+
+local function set_completion_colors()
+	vim.api.nvim_set_hl(0, "Pmenu", { fg = "#f2f2f2", bg = "#202020" })
+	vim.api.nvim_set_hl(0, "PmenuSel", { fg = "#f2f2f2", bg = "#303030", bold = true })
+	vim.api.nvim_set_hl(0, "PmenuKind", { fg = "#d0d0d0", bg = "#202020" })
+	vim.api.nvim_set_hl(0, "PmenuKindSel", { fg = "#f2f2f2", bg = "#303030", bold = true })
+	vim.api.nvim_set_hl(0, "PmenuExtra", { fg = "#b0b0b0", bg = "#202020" })
+	vim.api.nvim_set_hl(0, "PmenuExtraSel", { fg = "#dcdcdc", bg = "#303030" })
+	vim.api.nvim_set_hl(0, "PmenuMatch", { fg = "#ffffff", bg = "#202020", bold = true })
+	vim.api.nvim_set_hl(0, "PmenuMatchSel", { fg = "#ffffff", bg = "#303030", bold = true })
+	vim.api.nvim_set_hl(0, "PmenuSbar", { bg = "#252525" })
+	vim.api.nvim_set_hl(0, "PmenuThumb", { bg = "#505050" })
+end
+
+local qs_group = vim.api.nvim_create_augroup("qs_colors", { clear = true })
+vim.api.nvim_create_autocmd("ColorScheme", {
+	group = qs_group,
+	callback = function()
+		set_quick_scope_colors()
+		set_which_key_colors()
+		set_completion_colors()
+	end,
+})
+set_quick_scope_colors()
+set_which_key_colors()
+set_completion_colors()
