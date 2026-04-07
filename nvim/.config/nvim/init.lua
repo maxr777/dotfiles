@@ -1,3 +1,6 @@
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 vim.opt.relativenumber = true
 vim.opt.number = true
 vim.opt.scrolloff = 8
@@ -9,11 +12,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.opt.clipboard = "unnamedplus"
 vim.opt.completeopt = { "menu", "menuone", "popup" }
-vim.g.netrw_banner = 0
-vim.g.netrw_liststyle = 3
-vim.g.netrw_winsize = 25
-vim.g.netrw_keepdir = 0
-
 vim.opt.autoread = true
 
 vim.api.nvim_create_autocmd({"FocusGained", "BufEnter", "CursorHold", "CursorHoldI"}, {
@@ -56,12 +54,12 @@ vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
 
 -- Keep cursor centered when scrolling
-vim.keymap.set('n', '<C-d>', '<C-d>zz')
-vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center cursor' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center cursor' })
 
 -- Keep cursor centered when cycling through search results
-vim.keymap.set('n', 'n', 'nzzzv')
-vim.keymap.set('n', 'N', 'Nzzzv')
+vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search result and center cursor' })
+vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Previous search result and center cursor' })
 
 -- Select all
 vim.keymap.set('n', '<leader>a', 'gg<S-v>G', { desc = 'Select all' })
@@ -72,45 +70,45 @@ vim.keymap.set('v', '<leader>d', '"_d', { desc = 'Delete selection without yanki
 vim.keymap.set('n', '<leader>r', ':!./run.sh<CR>', { desc = 'Run run.sh' })
 vim.keymap.set('n', '<leader>m', ':!gcc main.c && ./a.out<CR>', { desc = 'Build and run' })
 
-vim.keymap.set('n', 'S', ':%s//g<Left><Left>', { noremap = true })
+vim.keymap.set('n', 'S', ':%s//g<Left><Left>', { noremap = true, desc = 'Substitute in current buffer' })
 
 vim.keymap.set('n', '<leader>c', ':!cppcheck --enable=all --suppress=missingIncludeSystem %<CR>', { desc = 'Run cppcheck' })
 
 vim.keymap.set("i", "<Tab>", smart_tab, { expr = true, desc = "Smart Tab - LSP completion" })
 vim.keymap.set("i", "<S-Tab>", "<C-p>", { desc = "Previous completion" })
 
-vim.keymap.set("n", "<C-Up>", ":resize +1<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<C-Down>", ":resize -1<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<C-Left>", ":vertical resize -1<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<C-Right>", ":vertical resize +1<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-Up>", ":resize +1<CR>", { noremap = true, silent = true, desc = "Increase window height" })
+vim.keymap.set("n", "<C-Down>", ":resize -1<CR>", { noremap = true, silent = true, desc = "Decrease window height" })
+vim.keymap.set("n", "<C-Left>", ":vertical resize -1<CR>", { noremap = true, silent = true, desc = "Decrease window width" })
+vim.keymap.set("n", "<C-Right>", ":vertical resize +1<CR>", { noremap = true, silent = true, desc = "Increase window width" })
 
-vim.keymap.set("n", "<C-h>", "<C-w>h", { noremap = true })
-vim.keymap.set("n", "<C-j>", "<C-w>j", { noremap = true })
-vim.keymap.set("n", "<C-k>", "<C-w>k", { noremap = true })
-vim.keymap.set("n", "<C-l>", "<C-w>l", { noremap = true })
+vim.keymap.set("n", "<C-h>", "<C-w>h", { noremap = true, desc = "Move to left window" })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { noremap = true, desc = "Move to lower window" })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { noremap = true, desc = "Move to upper window" })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { noremap = true, desc = "Move to right window" })
 
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.softtabstop = 2
 vim.opt.expandtab = false 
 
-vim.keymap.set("v", "<Tab>", ">gv", { noremap = true, silent = true })
-vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true, silent = true })
+vim.keymap.set("v", "<Tab>", ">gv", { noremap = true, silent = true, desc = "Indent selection" })
+vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true, silent = true, desc = "Outdent selection" })
 
-vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { noremap = true, desc = "Exit terminal mode" })
 
 vim.keymap.set("n", "<F5>", function()
 	vim.cmd.packadd("nvim.undotree")
 	vim.cmd.Undotree()
 end, { desc = "Toggle undo tree" })
 
-vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>bp", ":bprevious<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>bd", ":bdelete<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
+vim.keymap.set("n", "<leader>bp", ":bprevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
+vim.keymap.set("n", "<leader>bd", ":bdelete<CR>", { noremap = true, silent = true, desc = "Delete buffer" })
 
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { noremap = true, silent = true, desc = "Clear search highlights" })
 
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
@@ -125,12 +123,15 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 })
 
-vim.keymap.set("n", "<leader>e", ":Lexplore<CR>", { noremap = true, silent = true, desc = "Toggle file explorer" })
+vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { noremap = true, silent = true, desc = "Toggle file explorer" })
+vim.keymap.set("n", "<leader>i", function()
+	require("nvim-tree.api").filter.git.ignored.toggle()
+end, { noremap = true, silent = true, desc = "Toggle gitignored files" })
 
-vim.keymap.set("n", "<F7>", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true })
-vim.keymap.set("n", "<F8>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true })
-vim.keymap.set("t", "<F7>", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true })
-vim.keymap.set("t", "<F8>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true })
+vim.keymap.set("n", "<F7>", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true, desc = "Toggle floating terminal" })
+vim.keymap.set("n", "<F8>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true, desc = "Toggle horizontal terminal" })
+vim.keymap.set("t", "<F7>", "<cmd>ToggleTerm direction=float<cr>", { noremap = true, silent = true, desc = "Toggle floating terminal" })
+vim.keymap.set("t", "<F8>", "<cmd>ToggleTerm direction=horizontal<cr>", { noremap = true, silent = true, desc = "Toggle horizontal terminal" })
 
 
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })

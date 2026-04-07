@@ -42,6 +42,27 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	group = lsp_group,
 	callback = function(ev)
 		local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
+		local opts = { buffer = ev.buf }
+
+		vim.keymap.set({ "n", "x" }, "gra", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, {
+			desc = "Code action",
+		}))
+		vim.keymap.set("n", "gri", vim.lsp.buf.implementation, vim.tbl_extend("force", opts, {
+			desc = "Go to implementation",
+		}))
+		vim.keymap.set("n", "grr", vim.lsp.buf.references, vim.tbl_extend("force", opts, {
+			desc = "Show references",
+		}))
+		vim.keymap.set("n", "grt", vim.lsp.buf.type_definition, vim.tbl_extend("force", opts, {
+			desc = "Go to type definition",
+		}))
+		vim.keymap.set("n", "grx", vim.lsp.codelens.run, vim.tbl_extend("force", opts, {
+			desc = "Run code lens",
+		}))
+		vim.keymap.set("n", "gO", vim.lsp.buf.document_symbol, vim.tbl_extend("force", opts, {
+			desc = "Document symbols",
+		}))
+
 		if client:supports_method("textDocument/completion") then
 			vim.lsp.completion.enable(true, client.id, ev.buf)
 		end

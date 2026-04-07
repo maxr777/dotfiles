@@ -2,6 +2,7 @@ local plugins = {
 	"https://github.com/numToStr/Comment.nvim",
 	"https://github.com/nvim-treesitter/nvim-treesitter",
 	"https://github.com/nvim-tree/nvim-web-devicons",
+	"https://github.com/nvim-tree/nvim-tree.lua",
 	"https://github.com/nvim-lualine/lualine.nvim",
 	"https://github.com/windwp/nvim-autopairs",
 	"https://github.com/akinsho/toggleterm.nvim",
@@ -102,6 +103,20 @@ end)
 
 setup_if_available("which-key", function(mod)
 	mod.setup()
+end)
+
+setup_if_available("nvim-tree", function(mod)
+	mod.setup({
+		filters = {
+			git_ignored = true,
+		},
+		update_focused_file = {
+			enable = true,
+		},
+		view = {
+			width = 30,
+		},
+	})
 end)
 
 setup_if_available("conform", function(mod)
