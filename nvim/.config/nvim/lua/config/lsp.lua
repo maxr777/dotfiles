@@ -1,4 +1,8 @@
+local M = {}
+
+local servers = { "lua_ls", "clangd", "ts_ls", "html" }
 local lsp_group = vim.api.nvim_create_augroup("native-lsp", { clear = true })
+local lsp_enabled = true
 
 vim.lsp.config("*", {
 	root_markers = { ".git" },
@@ -69,4 +73,46 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	end,
 })
 
-vim.lsp.enable({ "lua_ls", "clangd", "ts_ls", "html" })
+local function clear_all_diagnostics()
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		vim.diagnostic.reset(nil, buf)
+	end
+end
+
+local function set_lsp_enabled(enabled)
+	for _, server in ipairs(servers) do
+		vim.lsp.enable(server, enabled)
+	end
+
+	if enabled then
+		for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+			if vim.api.nvim_buf_is_loaded(buf) then
+				vim.api.nvim_exec_autocmds("FileType", {
+					buffer = buf,
+					modeline = false,
+				})
+			end
+		end
+		vim.notify("LSP enabled", vim.log.levels.INFO)
+		return
+	end
+
+	for _, client in ipairs(vim.lsp.get_clients()) do
+		client:stop(true)
+	end
+	clear_all_diagnostics()
+	vim.notify("LSP disabled", vim.log.levels.WARN)
+end
+
+function M.toggle()
+	lsp_enabled = not lsp_enabled
+	set_lsp_enabled(lsp_enabled)
+end
+
+function M.is_enabled()
+	return lsp_enabled
+end
+
+vim.lsp.enable(servers)
+
+return M

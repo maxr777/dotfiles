@@ -10,6 +10,7 @@ vim.opt.timeoutlen = 300
 vim.opt.colorcolumn = "100"
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
+vim.g.clipboard = "xclip"
 vim.opt.clipboard = "unnamedplus"
 vim.opt.completeopt = { "menu", "menuone", "popup" }
 vim.opt.autoread = true
@@ -171,6 +172,10 @@ vim.keymap.set("n", "<leader>ld", function()
 		source = "if_many",
 	})
 end, { desc = "Show diagnostics in floating window" })
+
+vim.keymap.set("n", "<leader>lx", function()
+	require("config.lsp").toggle()
+end, { desc = "Toggle LSP" })
 
 vim.diagnostic.config({
   virtual_text = false,
