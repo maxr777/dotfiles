@@ -72,3 +72,6 @@ export PATH=/home/max/.opencode/bin:$PATH
 alias get_idf='. $HOME/esp/esp-idf/export.sh'
 
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+export PATH=$HOME/.npm-global/bin:$PATH
+
+alias ll='ls -lh'
